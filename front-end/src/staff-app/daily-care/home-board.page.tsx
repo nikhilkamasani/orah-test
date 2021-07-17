@@ -38,7 +38,7 @@ export const HomeBoardPage: React.FC = () => {
 
   useEffect(() => {
     setDisplayResults(filterStudents(students))
-  }, [filter, isRollMode])
+  }, [filter])
 
   const onToolbarAction = (action: ToolbarAction, type: string, value: string) => {
     if (action === "roll") {
@@ -79,7 +79,7 @@ export const HomeBoardPage: React.FC = () => {
 
   const filterStudents = (list: Person[]) => {
     const { first_name, last_name, search, roll} = filter
-    let filteredList = list;
+    let filteredList = [...list];
     if(search){
       filteredList = filteredList.filter(a => PersonHelper.getFullName(a).toLowerCase().includes(search))
     }
