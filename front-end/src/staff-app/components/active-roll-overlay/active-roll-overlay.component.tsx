@@ -3,15 +3,19 @@ import styled from "styled-components"
 import Button from "@material-ui/core/Button"
 import { BorderRadius, Spacing } from "shared/styles/styles"
 import { RollStateList } from "staff-app/components/roll-state/roll-state-list.component"
+import { Person } from "../../../shared/models/person"
+import { RollType } from "../../../shared/models/filter"
 
-export type ActiveRollAction = "filter" | "exit"
+export type ActiveRollAction = "filter" | "exit" | "save"
 interface Props {
   isActive: boolean
-  onItemClick: (action: ActiveRollAction, value?: string) => void
+  onItemClick: (action: ActiveRollAction, value?: RollType) => void
+  students: Person[]
 }
 
 export const ActiveRollOverlay: React.FC<Props> = (props) => {
-  const { isActive, onItemClick } = props
+  const { isActive, onItemClick, students } = props
+
 
   return (
     <S.Overlay isActive={isActive}>
@@ -20,17 +24,18 @@ export const ActiveRollOverlay: React.FC<Props> = (props) => {
         <div>
           <RollStateList
             stateList={[
-              { type: "all", count: 0 },
-              { type: "present", count: 0 },
-              { type: "late", count: 0 },
-              { type: "absent", count: 0 },
+              { type: "all", roll: null, count: students.length },
+              { type: "present", roll: "present", count: students.filter(a => a.roll === "present").length },
+              { type: "late", roll: "late", count: students.filter(a => a.roll === "late").length },
+              { type: "absent", roll: "absent", count: students.filter(a => a.roll === "absent").length },
             ]}
+            onItemClick={(type) => onItemClick("filter", type)}
           />
           <div style={{ marginTop: Spacing.u6 }}>
             <Button color="inherit" onClick={() => onItemClick("exit")}>
               Exit
             </Button>
-            <Button color="inherit" style={{ marginLeft: Spacing.u2 }} onClick={() => onItemClick("exit")}>
+            <Button color="inherit" style={{ marginLeft: Spacing.u2 }} onClick={() => onItemClick("save")}>
               Complete
             </Button>
           </div>

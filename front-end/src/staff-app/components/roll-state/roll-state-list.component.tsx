@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RollStateIcon } from "staff-app/components/roll-state/roll-state-icon.component"
 import { Spacing, FontWeight } from "shared/styles/styles"
 import { RolllStateType } from "shared/models/roll"
+import { RollType } from "../../../shared/models/filter"
 
 interface Props {
   stateList: StateList[]
-  onItemClick?: (type: ItemType) => void
+  onItemClick?: (type: RollType) => void
   size?: number
 }
 export const RollStateList: React.FC<Props> = ({ stateList, size = 14, onItemClick }) => {
-  const onClick = (type: ItemType) => {
+  const onClick = (type: RollType) => {
     if (onItemClick) {
       onItemClick(type)
     }
@@ -23,7 +24,7 @@ export const RollStateList: React.FC<Props> = ({ stateList, size = 14, onItemCli
         if (s.type === "all") {
           return (
             <S.ListItem key={i}>
-              <FontAwesomeIcon icon="users" size="sm" style={{ cursor: "pointer" }} onClick={() => onClick(s.type)} />
+              <FontAwesomeIcon icon="users" size="sm" style={{ cursor: "pointer" }} onClick={() => onClick(s.roll)} />
               <span>{s.count}</span>
             </S.ListItem>
           )
@@ -31,7 +32,7 @@ export const RollStateList: React.FC<Props> = ({ stateList, size = 14, onItemCli
 
         return (
           <S.ListItem key={i}>
-            <RollStateIcon type={s.type} size={size} onClick={() => onClick(s.type)} />
+            <RollStateIcon type={s.type} size={size} onClick={() => onClick(s.roll)} />
             <span>{s.count}</span>
           </S.ListItem>
         )
@@ -59,6 +60,7 @@ const S = {
 
 interface StateList {
   type: ItemType
+  roll: RollType
   count: number
 }
 
