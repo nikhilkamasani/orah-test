@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import Button from "@material-ui/core/ButtonBase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -54,6 +55,9 @@ export const HomeBoardPage: React.FC = () => {
     }
   }
 
+  const [saveRoll] = useApi({url: "save-roll"})
+  const navigate = useNavigate();
+
   const onActiveRollAction = (action: ActiveRollAction, roll?: RollType) => {
     if (action === "exit") {
       setIsRollMode(false)
@@ -61,6 +65,15 @@ export const HomeBoardPage: React.FC = () => {
     }
     if(action === "filter"){
       setFilter({...filter, roll: roll ? roll : null})
+    }
+    if(action === "save"){
+      saveRoll({student_roll_states: students.map(a => ({student_id: a.id, roll_state: a.roll === undefined ? "unmark" : a.roll}))})
+        .then(() => {
+          navigate("/staff/activity")
+        }).catch(() => {
+        setIsRollMode(false)
+        setFilter({...filter, roll: null})
+      })
     }
   }
 
