@@ -9,7 +9,7 @@ import { Person, PersonHelper } from "shared/models/person"
 import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
 import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
-import { Filter } from "../../shared/models/filter"
+import { Filter, RollType } from "../../shared/models/filter"
 import { RolllStateType } from "../../shared/models/roll"
 
 export const HomeBoardPage: React.FC = () => {
@@ -54,9 +54,13 @@ export const HomeBoardPage: React.FC = () => {
     }
   }
 
-  const onActiveRollAction = (action: ActiveRollAction) => {
+  const onActiveRollAction = (action: ActiveRollAction, roll?: RollType) => {
     if (action === "exit") {
       setIsRollMode(false)
+      setFilter({...filter, roll: null})
+    }
+    if(action === "filter"){
+      setFilter({...filter, roll: roll ? roll : null})
     }
   }
 
