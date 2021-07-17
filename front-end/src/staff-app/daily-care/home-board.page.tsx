@@ -10,6 +10,7 @@ import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
 import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
 import { Filter } from "../../shared/models/filter"
+import { RolllStateType } from "../../shared/models/roll"
 
 export const HomeBoardPage: React.FC = () => {
   const [isRollMode, setIsRollMode] = useState(false)
@@ -79,6 +80,10 @@ export const HomeBoardPage: React.FC = () => {
     return filteredList
   }
 
+  const updateRoll = (rollState: RolllStateType, student: Person) => {
+    setStudents([...students.filter(a => a.id !== student.id), {...student, roll: rollState}])
+  }
+
   return (
     <>
       <S.PageContainer>
@@ -92,7 +97,7 @@ export const HomeBoardPage: React.FC = () => {
         {loadState === "loaded" && (
           <>
             {displayResults.map((s) => (
-              <StudentListTile key={s.id} isRollMode={isRollMode} student={s} />
+              <StudentListTile key={s.id} isRollMode={isRollMode} student={s} onStateChange={updateRoll}/>
             ))}
           </>
         )}
@@ -103,7 +108,7 @@ export const HomeBoardPage: React.FC = () => {
           </CenteredContainer>
         )}
       </S.PageContainer>
-      <ActiveRollOverlay isActive={isRollMode} onItemClick={onActiveRollAction} />
+      <ActiveRollOverlay isActive={isRollMode} onItemClick={onActiveRollAction} students={students}/>
     </>
   )
 }
